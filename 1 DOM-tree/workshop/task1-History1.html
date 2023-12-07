@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History1</title>
+</head>
+<body>
+    <section>
+        <a href="./task1.html">Первая страница</a>
+        <a href="./task1-History1.html">Вторая страница</a>
+        <button class="backButton">Назад</button>
+        <button class="forwardButton">Вперед</button>
+    </section>
+
+    <script>
+
+        const backBtnEl = document.querySelector('.backButton');
+        const forwardBtnEl = document.querySelector('.forwardButton');
+        
+        backBtnEl.addEventListener('click', function (e) {
+            window.history.back();
+        });
+
+        forwardBtnEl.addEventListener('click', function (e) {
+            window.history.forward();
+        });
+
+    </script>
+
+</body>
+</html>

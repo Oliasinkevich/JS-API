@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!--
+1 Определение текущего размера окна браузера:
+Напишите функцию, которая будет выводить текущую ширину и высоту окна браузера при его изменении. -->
+
+    <section class="task">
+        <h1>Определение текущего размера окна браузера</h1>
+        <p>Ширина окна: <span class="window-size" id="width"></span> px</p>
+        <p>Высота окна: <span class="window-size" id="height"></span> px</p>
+    </section>
+
+    <script>
+        const taskEl = document.querySelector('.task');
+        const windowWith = document.getElementById('width');
+        const windowHeight = document.getElementById('height');
+
+        function showSizeWindow() {
+            windowWith.textContent = window.innerWidth;
+            windowHeight.textContent = window.innerHeight;
+        }
+
+        window.addEventListener('load', showSizeWindow);
+        window.addEventListener('resize', showSizeWindow);
+
+    </script>
+
+    <!-- 
+2 Подтверждение закрытия страницы:
+Создайте всплывающее окно или диалоговое окно, которое появляется при попытке закрыть вкладку браузера и спрашивает пользователя, уверен ли он в своем решении закрыть страницу. -->
+
+    <script>
+        window.addEventListener("beforeunload", e => {
+            e.preventDefault();
+            e.returnValue = 'Вы уверены, что хотите покинуть эту страницу?';
+        });
+    </script>
+
+    <!-- 
+3 Управление историей переходов:
+Используйте объект history для управления историей переходов на веб-странице. Создайте кнопки "Назад" и "Вперед" для перемещения по истории. -->
+
+    <section>
+        <a href="./task1.html">Первая страница</a>
+        <a href="./task1-History1.html">Вторая страница</a>
+        <button class="backButton">Назад</button>
+        <button class="forwardButton">Вперед</button>
+    </section>
+
+    <script>
+
+        const backBtnEl = document.querySelector('.backButton');
+        const forwardBtnEl = document.querySelector('.forwardButton');
+        
+        backBtnEl.addEventListener('click', function (e) {
+            window.history.back();
+        });
+
+        forwardBtnEl.addEventListener('click', function (e) {
+            window.history.forward();
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Вы создаете веб-страницу для отображения списка статей. Каждая статья состоит из заголовка и текста. Вам необходимо использовать Bootstrap для стилизации элементов.
+Используйте Bootstrap, чтобы стилизовать элементы:
+Заголовок статьи (<h2>)
+Текст статьи (<p>)
+Кнопки "Добавить статью", "Удалить" и "Редактировать".
+Создайте начальный список статей, который будет загружаться при загрузке страницы. Используйте JSON-данные для определения заголовков и текстов статей.
+Позвольте пользователю добавлять новые статьи. При нажатии на кнопку "Добавить статью" должна появиться новая статья с заголовком "Новая статья" и текстом "Введите содержание статьи...".
+* Реализуйте функциональность удаления статей. При нажатии на кнопку "Удалить" соответствующая статья должна быть удалена из списка.
+* Реализуйте функциональность редактирования статей. При нажатии на кнопку "Редактировать" пользователь должен иметь возможность изменить заголовок и текст статьи. Используйте всплывающее окно или prompt для ввода новых данных.
+* Все изменения (добавление, удаление, редактирование) должны быть сохранены в локальное хранилище браузера, чтобы они сохранялись после перезагрузки страницы. -->
+
+    <section>
+        <div class="article"></div>
+        <br>
+        <button class="add-button">Добавить статью</button>
+    </section>
+
+    <script>
+        const articlesData = [
+            {
+                title: 'Заголовок статьи 1',
+                content: 'Содержание статьи 1'
+            },
+            {
+                title: 'Заголовок статьи 2',
+                content: 'Содержание статьи 2'
+            }
+        ];
+
+        const articleDiv = document.querySelector('.article');
+        const addBtn = document.querySelector('.add-button');
+
+        window.addEventListener("load", loadArticleJSON);
+
+        function loadArticleJSON() {
+            articlesData.forEach((article) => {
+                articleDiv.innerHTML += `
+                    <h2 class="title">${article.title}</h2>
+                    <p class="text">${article.content}</p>
+                    <button onClick="editBtn" class="edit-btn">Редактировать</button>
+                    <button onClick="removeBtn" class="remove-btn">Удалить</button>
+                    `
+            })
+        }
+
+        addBtn.addEventListener('click', () => {
+            const newArticle = {
+                title: 'Новая статья',
+                content: 'Введите содержание статьи...'
+            };
+            articleDiv.innerHTML += `
+                <h2 class="title">${newArticle.title}</h2>
+                <p class="text">${newArticle.content}</p>
+                <button class="edit-btn">Редактировать</button>
+                <button class="remove-btn">Удалить</button>
+                `
+        });
+
+    </script>
+</body>
+
+</html>
