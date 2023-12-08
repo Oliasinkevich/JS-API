@@ -149,29 +149,28 @@
                 });
             } else if (!isBtnAddClicked) {
                 addBtn.addEventListener('click', function (e) {
-                    if (lesson.maxParticipants > lesson.currentParticipants) {
+                    if (lesson.currentParticipants < lesson.maxParticipants) {
+                        lesson.currentParticipants++;
+                        currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
                         addBtn.disabled = true;
                         addBtn.textContent = 'Вы записаны';
                         localStorage.setItem(`lesson_${lesson.id}_clicked`, true);
-                        lesson.currentParticipants++;
-                        currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
+
                         const removeBtn = document.createElement('button');
                         removeBtn.className = 'lesson-remove';
                         removeBtn.textContent = 'Отменить запись';
                         lessonEl.appendChild(removeBtn);
-                        localStorage.setItem((lesson.id), JSON.stringify(lesson));
+                        localStorage.setItem(lesson.id, JSON.stringify(lesson));
 
-                        removeBtn.addEventListener('click', function (e) {
-                            addBtn.disabled = false;
-                            addBtn.textContent = 'Записаться';
-                            // localStorage.removeItem(`lesson_${lesson.id}_clicked`);
+                        removeBtn.addEventListener('click', function () {
                             lesson.currentParticipants--;
                             currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
+                            addBtn.disabled = false;
+                            addBtn.textContent = 'Записаться';
+                            localStorage.removeItem(`lesson_${lesson.id}_clicked`);
                             lessonEl.removeChild(removeBtn);
-                            localStorage.setItem(`lesson_${lesson.id}_clicked`, false);
-                            localStorage.setItem((lesson.id), JSON.stringify(lesson));
+                            localStorage.setItem(lesson.id, JSON.stringify(lesson));
                         });
-
                     } else {
                         addBtn.style.display = 'none';
                     }
@@ -189,6 +188,11 @@
                     lesson.currentParticipants = storedLesson.currentParticipants;
                 }
                 createLessonElement(lesson);
+                const addBtn = containerDiv.querySelector(`#lesson_${lesson.id} .lesson-add`);
+                if (localStorage.getItem(`lesson_${lesson.id}_clicked`)) {
+                    addBtn.disabled = true;
+                    addBtn.textContent = 'Вы записаны';
+                }
             });
         });
 
