@@ -111,7 +111,19 @@
                     "maxParticipants": 8,
                     "currentParticipants": 6
                 }
-            ]
+            ];
+
+        // window.addEventListener('load', function (e) {
+        //     lessonsData.forEach((lesson) => {
+        //         const storedLesson = JSON.parse(localStorage.getItem(`lesson_${lesson.id}`));
+        //         if (storedLesson) {
+        //             lesson.currentParticipants = storedLesson.currentParticipants;
+        //         }
+        //         createLessonElement(lesson);
+        //     });
+        // });
+
+        // localStorage.clear();
 
         function createLessonElement(lesson) {
             const lessonEl = document.createElement('div');
@@ -128,76 +140,68 @@
             const maxParticipantsEl = lessonEl.querySelector('.maxParticipants');
             const currentParticipantsEl = lessonEl.querySelector('.currentParticipants');
 
+            // Проверка и обновление состояния кнопки "Записаться" при загрузке
             const isBtnAddClicked = localStorage.getItem(`lesson_${lesson.id}_clicked`);
             if (isBtnAddClicked) {
                 addBtn.disabled = true;
                 addBtn.textContent = 'Вы записаны';
-                const removeBtn = document.createElement('button');
-                removeBtn.className = 'lesson-remove';
-                removeBtn.textContent = 'Отменить запись';
-                lessonEl.appendChild(removeBtn);
-
-                removeBtn.addEventListener('click', function (e) {
-                    lesson.currentParticipants--;
+            }
+            addBtn.addEventListener('click', function (e) {
+                // Обработчик события для кнопки "Записаться"
+                // ... оставшаяся логика обработчика события ...
+                if (lesson.maxParticipants > lesson.currentParticipants) {
+                    addBtn.disabled = true;
+                    addBtn.textContent = 'Вы записаны';
+                    localStorage.setItem(`lesson_${lesson.id}_clicked`, true);
+                    lesson.currentParticipants++;
                     currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
-                    addBtn.disabled = false;
-                    addBtn.textContent = 'Записаться';
-                    localStorage.removeItem(`lesson_${lesson.id}_clicked`);
-                    lessonEl.removeChild(removeBtn);
-                    // localStorage.setItem(`lesson_${lesson.id}_clicked`, false);
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'lesson-remove';
+                    removeBtn.textContent = 'Отменить запись';
+                    lessonEl.appendChild(removeBtn);
                     localStorage.setItem((lesson.id), JSON.stringify(lesson));
-                });
-            } else if (!isBtnAddClicked) {
-                addBtn.addEventListener('click', function (e) {
-                    if (lesson.currentParticipants < lesson.maxParticipants) {
-                        lesson.currentParticipants++;
-                        currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
-                        addBtn.disabled = true;
-                        addBtn.textContent = 'Вы записаны';
-                        localStorage.setItem(`lesson_${lesson.id}_clicked`, true);
+                }
+            });
 
-                        const removeBtn = document.createElement('button');
-                        removeBtn.className = 'lesson-remove';
-                        removeBtn.textContent = 'Отменить запись';
-                        lessonEl.appendChild(removeBtn);
-                        localStorage.setItem(lesson.id, JSON.stringify(lesson));
 
-                        removeBtn.addEventListener('click', function () {
-                            lesson.currentParticipants--;
-                            currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
-                            addBtn.disabled = false;
-                            addBtn.textContent = 'Записаться';
-                            localStorage.removeItem(`lesson_${lesson.id}_clicked`);
-                            lessonEl.removeChild(removeBtn);
-                            localStorage.setItem(lesson.id, JSON.stringify(lesson));
-                        });
-                    } else {
-                        addBtn.style.display = 'none';
-                    }
-                });
+            // Отображение кнопки "Отменить запись", если пользователь уже записан
+            if (isBtnAddClicked) {
+                const removeBtn = createRemoveButton(lesson, addBtn, currentParticipantsEl);
+                lessonEl.appendChild(removeBtn);
             }
 
-            containerDiv.appendChild(lessonEl);
 
+        function createRemoveButton(lesson, addBtn, currentParticipantsEl) {
+            // Функция для создания кнопки "Отменить запись"
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'lesson-remove';
+            removeBtn.textContent = 'Отменить запись';
+            removeBtn.addEventListener('click', function () {
+                // Обработчик события для кнопки "Отменить запись"
+                // ... оставшаяся логика обработчика события ...
+                lesson.currentParticipants--;
+                currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
+                addBtn.disabled = false;
+                addBtn.textContent = 'Записаться';
+                localStorage.removeItem(`lesson_${lesson.id}_clicked`);
+                lessonEl.removeChild(removeBtn);
+                // localStorage.setItem(`lesson_${lesson.id}_clicked`, false);
+                localStorage.setItem((lesson.id), JSON.stringify(lesson));
+            });
+            return removeBtn;
+        }
+        containerDiv.appendChild(lessonEl);
         }
 
         window.addEventListener('load', function (e) {
             lessonsData.forEach((lesson) => {
-                const storedLesson = JSON.parse(localStorage.getItem(lesson.id));
+                const storedLesson = JSON.parse(localStorage.getItem(`lesson_${lesson.id}`));
                 if (storedLesson) {
                     lesson.currentParticipants = storedLesson.currentParticipants;
                 }
                 createLessonElement(lesson);
-                const addBtn = containerDiv.querySelector(`#lesson_${lesson.id} .lesson-add`);
-                if (localStorage.getItem(`lesson_${lesson.id}_clicked`)) {
-                    addBtn.disabled = true;
-                    addBtn.textContent = 'Вы записаны';
-                }
             });
         });
-        
-
-        // localStorage.clear();
 
 
     </script>
