@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Document</title>
+		<style>
+			.schedule {
+				text-align: center;
+			}
+
+			.container {
+				display: flex;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 15px;
+				padding: 15px;
+			}
+
+			.lesson {
+				border: black solid 1px;
+				padding: 5px;
+			}
+
+			.name {
+				text-align: center;
+			}
+
+			.btns {
+				text-align: center;
+			}
+
+			.lesson-add:hover {
+				background-color: black;
+				color: white;
+				text-align: center;
+			}
+
+			.lesson-remove:hover {
+				background-color: black;
+				color: white;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- Статическая веб-страница с динамическими элементами:
+Создайте HTML-страницу с заголовком "Расписание занятий".
+
+1. Таблица с информацией о занятиях:
+Используйте JavaScript для динамического создания таблицы на основе JSON-данных.
+Каждая строка таблицы должна содержать информацию о занятии: название, время проведения, максимальное и текущее количество участников.
+2. Кнопки "Записаться" и "Отменить запись":
+Рядом с каждым занятием добавьте кнопку "Записаться".
+Если максимальное количество участников достигнуто, сделайте кнопку неактивной.
+Предусмотрите кнопку "Отменить запись", которая появляется после записи на занятие.
+3. Интерактивность с JavaScript:
+При нажатии на кнопку "Записаться" увеличьте количество записанных участников.
+Если пользователь нажимает "Отменить запись", уменьшите количество записанных участников.
+Обновляйте состояние кнопок и количество участников в реальном времени.
+4. Дополнительно: Хранение данных в Local Storage:
+
+Сохраняйте изменения в Local Storage, чтобы они сохранялись при перезагрузке страницы. -->
+
+		<section>
+			<h1 class="schedule">Расписание занятий by DJ Olya Yooo feat Medved</h1>
+			<div class="container"></div>
+		</section>
+
+		<script>
+			const containerDiv = document.querySelector('.container');
+
+			const lessonsData = [
+				{
+					id: 1,
+					name: 'Йога',
+					time: '10:00 - 11:00',
+					maxParticipants: 15,
+					currentParticipants: 8,
+				},
+				{
+					id: 2,
+					name: 'Пилатес',
+					time: '11:30 - 12:30',
+					maxParticipants: 10,
+					currentParticipants: 5,
+				},
+				{
+					id: 3,
+					name: 'Кроссфит',
+					time: '13:00 - 14:00',
+					maxParticipants: 20,
+					currentParticipants: 15,
+				},
+				{
+					id: 4,
+					name: 'Танцы',
+					time: '14:30 - 15:30',
+					maxParticipants: 12,
+					currentParticipants: 10,
+				},
+				{
+					id: 5,
+					name: 'Бокс',
+					time: '16:00 - 17:00',
+					maxParticipants: 8,
+					currentParticipants: 6,
+				},
+			];
+
+			function createLessonElement(lesson) {
+				const lessonEl = document.createElement('div');
+				lessonEl.className = 'lesson';
+				lessonEl.innerHTML += `
+                        <h2 class="name">${lesson.name}</h2>
+                        <p class="time">Время: ${lesson.time}</p>
+                        <p class="maxParticipants">Количество мест: ${lesson.maxParticipants}</p>
+                        <p class="currentParticipants">Забронировано мест: ${lesson.currentParticipants}</p>
+                        <button class="lesson-add">Записаться</button>
+                    `;
+
+				const addBtn = lessonEl.querySelector('.lesson-add');
+				const maxParticipantsEl = lessonEl.querySelector('.maxParticipants');
+				const currentParticipantsEl = lessonEl.querySelector(
+					'.currentParticipants'
+				);
+
+				// Проверка и обновление состояния кнопки "Записаться" при загрузке
+				const isBtnAddClicked = localStorage.getItem(
+					`lesson_${lesson.id}_clicked`
+				);
+				if (isBtnAddClicked) {
+					addBtn.disabled = true;
+					addBtn.textContent = 'Вы записаны';
+				}
+				addBtn.addEventListener('click', function (e) {
+					// Обработчик события для кнопки "Записаться"
+					// ... оставшаяся логика обработчика события ...
+					if (lesson.maxParticipants > lesson.currentParticipants) {
+						addBtn.disabled = true;
+						addBtn.textContent = 'Вы записаны';
+						localStorage.setItem(`lesson_${lesson.id}_clicked`, true);
+						lesson.currentParticipants++;
+						currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
+
+						//MEDVED: добавил твою функцию по кнопке удалить, раньше на кнопке не было обработчика
+						const removeBtn = createRemoveButton(
+							lesson,
+							addBtn,
+							currentParticipantsEl
+						);
+						lessonEl.appendChild(removeBtn);
+
+						// const removeBtn = document.createElement('button');
+						// removeBtn.className = 'lesson-remove';
+						// removeBtn.textContent = 'Отменить запись';
+						// lessonEl.appendChild(removeBtn);
+						localStorage.setItem(lesson.id, JSON.stringify(lesson));
+					}
+				});
+
+				// Отображение кнопки "Отменить запись", если пользователь уже записан
+				if (isBtnAddClicked) {
+					const removeBtn = createRemoveButton(
+						lesson,
+						addBtn,
+						currentParticipantsEl
+					);
+					lessonEl.appendChild(removeBtn);
+				}
+
+				function createRemoveButton(lesson, addBtn, currentParticipantsEl) {
+					// Функция для создания кнопки "Отменить запись"
+					const removeBtn = document.createElement('button');
+					removeBtn.className = 'lesson-remove';
+					removeBtn.textContent = 'Отменить запись';
+					removeBtn.addEventListener('click', function () {
+						// Обработчик события для кнопки "Отменить запись"
+						// ... оставшаяся логика обработчика события ...
+						lesson.currentParticipants--;
+						currentParticipantsEl.textContent = `Забронировано мест: ${lesson.currentParticipants}`;
+						addBtn.disabled = false;
+						addBtn.textContent = 'Записаться';
+						localStorage.removeItem(`lesson_${lesson.id}_clicked`);
+						lessonEl.removeChild(removeBtn);
+						// localStorage.setItem(`lesson_${lesson.id}_clicked`, false);
+						localStorage.setItem(lesson.id, JSON.stringify(lesson));
+					});
+					return removeBtn;
+				}
+				containerDiv.appendChild(lessonEl);
+			}
+
+			window.addEventListener('load', function (e) {
+				lessonsData.forEach((lesson) => {
+					//MEDVED: у тебя тут было lesson_${lesson.id} Зачем?)))
+					const storedLesson = JSON.parse(localStorage.getItem(`${lesson.id}`));
+					if (storedLesson) {
+						lesson.currentParticipants = storedLesson.currentParticipants;
+					}
+					createLessonElement(lesson);
+				});
+			});
+		</script>
+	</body>
+</html>
