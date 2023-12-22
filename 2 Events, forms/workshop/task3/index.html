@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- У вас есть кнопка "Купить". Создайте скрипт, который при клике на эту кнопку меняет её текст на "Товар добавлен в
+    корзину" в течение 2 секунд, а затем возвращает исходный текст "Купить". В обработчике события клика также
+    проверьте, является ли событие доверенным. Если событие является доверенным, выполните изменение текста кнопки и
+    убедитесь, что после 2 секунд текст возвращается в исходное состояние. -->
+
+    <section class="buy">
+        <button class="buyBtn">Купить</button>
+        <div>
+            <p class="buy__text"></p>
+        </div>
+    </section>
+
+
+    <script>
+        const buyBtn = document.querySelector(".buyBtn");
+        const text = document.querySelector(".buy__text");
+        buyBtn.addEventListener("click", (e) => {
+            if (e.isTrusted) {
+                e.target.classList.add("hidden");
+                text.textContent = "Товар добвален в корзину";
+                setTimeout(() => {
+                    e.target.classList.remove("hidden");
+                    text.textContent = "";
+                }, 2000);
+            } else console.log("Error");
+        });
+    </script>
+</body>
+
+</html>

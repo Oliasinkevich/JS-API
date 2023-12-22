@@ -1,11 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        body {
+            padding: 50px;
+        }
+
+        .modal {
+            padding: 20px;
+            border: 1px solid teal;
+            width: 400px;
+            background-color: white;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.8s ease;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .close-modal-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hidden {
+            /* display: none; */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s, visibility 0.8s ease;
+        }
+    </style>
 </head>
+
 <body>
-    
+
+    <!-- Создайте простое модальное окно, которое появляется при клике на кнопку "Открыть модальное окно" и закрывается при
+    клике на кнопку "Закрыть". Модальное окно должно содержать заголовок "Модальное окно" и кнопку для закрытия.
+    * Модальное окно должно плавно появляться и исчезать при открытии и закрытии. -->
+
+    <button class="open-modal-btn">Открыть модальное окно</button>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Модальное окно</h2>
+            <p>Нажмите кнопку "Закрыть", чтобы закрыть окно.</p>
+            <button class="close-modal-btn">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- <button class="open">Открыть модальное окно</button>
+    <div class="modal hidden">
+        <h2>Модальное окно</h2>
+        <p>Нажмите кнопку &quot;Закрыть&quot;, чтобы закрыть модальное окно!</p>
+        <button class="close">Закрыть</button>
+    </div> -->
+
+    <script>
+        const modalOpen = document.querySelector('.open-modal-btn');
+        const modalClose = document.querySelector('.close-modal-btn');
+        const modal = document.querySelector('.modal');
+        modalOpen.addEventListener('click', () => {
+            // modal.style.display = 'block';
+            // или
+            modal.classList.remove('hidden');
+        })
+
+        modalClose.addEventListener('click', () => {
+            // modal.style.display = 'none';
+            // или
+            modal.classList.add('hidden');
+        })
+
+        // или
+        // const openBtn = document.querySelector('.open');
+        // const modal = document.querySelector('.modal');
+        // const closeBtn = document.querySelector('.close');
+
+        // openBtn.addEventListener('click', () => {
+        //     modal.classList.remove('hidden');
+        // });
+
+        // closeBtn.addEventListener('click', () => {
+        //     modal.classList.add('hidden');
+        // });
+    </script>
 </body>
+
 </html>

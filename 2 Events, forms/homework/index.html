@@ -1,11 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .slider {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .slider-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .slider-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            left: 100px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .slider-indicators {
+            position: absolute;
+            bottom: 375px;
+            left: 250px;
+            display: flex;
+        }
+
+        .slider-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: gray;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <!-- Вашей задачей является создание веб-слайдера для отображения изображений на веб-странице.
+
+    1. Создайте интерфейс веб-страницы, который включает в себя следующие элементы:
+
+    a. Контейнер для отображения текущего изображения.
+    b. Кнопки "Предыдущее изображение" и "Следующее изображение" для переключения между изображениями. 
+    c. Навигационные точки (индикаторы) для быстрого переключения между изображениями.
+
+    2. Используйте HTML для создания элементов интерфейса.
+
+    3. Используйте JavaScript для обработки событий:
+
+    a. При клике на кнопку "Предыдущее изображение" должно отображаться предыдущее изображение.
+    b. При клике на кнопку "Следующее изображение" должно отображаться следующее изображение.
+    c. При клике на навигационные точки, слайдер должен переключаться к соответствующему изображению.
+
+    4. Слайдер должен циклически переключаться между изображениями, то есть после последнего изображения должно
+    отображаться первое, и наоборот.
+
+    5. Добавьте стилизацию для слайдера и элементов интерфейса с использованием CSS для улучшения внешнего вида. -->
+
+    <div class="slider">
+        <div class="slider-container">
+            <img class="slider-image" src="img/1.jpg" alt="Image 1">
+            <img class="slider-image" src="img/2.jpg" alt="Image 2">
+            <img class="slider-image" src="img/3.jpg" alt="Image 3">
+        </div>
+
+        <div class="slider-controls">
+            <button class="slider-prev">Предыдущее изображение</button>
+            <button class="slider-next">Следующее изображение</button>
+        </div>
+
+        <div class="slider-indicators">
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+        </div>
+    </div>
+
+    <script>
+        const sliderContainer = document.querySelector('.slider-container');
+        const prevBtn = document.querySelector('.slider-prev');
+        const nextBtn = document.querySelector('.slider-next');
+        const indicators = document.querySelectorAll('.slider-indicator');
+
+        let currentIndex = 0;
+        const slideWidth = sliderContainer.clientWidth;
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + indicators.length) % indicators.length;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % indicators.length;
+            updateSlider();
+        });
+
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                updateSlider();
+            });
+        });
+
+        function updateSlider() {
+            sliderContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+
+            indicators.forEach((indicator, index) => {
+                if (index === currentIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+    </script>
 </body>
+
 </html>
