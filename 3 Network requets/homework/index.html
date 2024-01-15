@@ -1,11 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+
+        .image-button img {
+            border: 1px solid black; 
+            padding: 7px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .image-button:active img {
+            background: aqua;
+        }
+
+        .img-container img {
+            width: 250px;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .like-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+    </style>
 </head>
+
 <body>
+    <!-- Разработать веб-приложение, которое каждый день будет отображать новое случайное изображение из коллекции Unsplash,
+    давая пользователю возможность узнать больше о фотографе и сделать "лайк" изображению.
+
+    Разработка веб-приложения:
+    • Создайте HTML-страницу с элементами: изображение, имя фотографа, кнопка "лайк" и счетчик лайков.
+    • Используя JavaScript и ваш API-ключ, получите случайное изображение из Unsplash каждый раз, когда пользователь
+    загружает страницу.
+    • Отобразите информацию о фотографе под изображением.
+    • Реализуйте функционал "лайка". Каждый раз, когда пользователь нажимает кнопку "лайк", счетчик должен увеличиваться
+    на единицу.
+
+    * Дополнительные задачи (по желанию):
+    • Добавьте функцию сохранения количества лайков в локальное хранилище, чтобы при новой загрузке страницы счетчик не
+    сбрасывался.
     
+    • Реализуйте возможность просмотра предыдущих "фото дня" с сохранением их в истории просмотров. -->
+
+
+    <div id="photo-container"></div>
+    <div class="like-container">
+        <a href="#" class=image-button>
+            <img src="like.svg" alt="like">
+        </a>
+    </div>
+
+    <script>
+
+        const photoContainer = document.getElementById('photo-container');
+
+        async function fetchRandomPhoto() {
+            try {
+                const response = await fetch('https://api.unsplash.com/photos/random?client_id=-7TOGXu7sLs3IOCYHZ4sa5-mTHK1jTQqaKAzIpa4sgc');
+                const photo = await response.json();
+                return photo;
+            } catch (error) {
+                console.error('Ошибка при загрузке фотографии:', error);
+                return null;
+            }
+        }
+
+        async function loadRandomPhoto() {
+            const randomPhoto = await fetchRandomPhoto();
+            if (randomPhoto) {
+                photoContainer.innerHTML = `
+            <div class=img-container>
+                <img src="${randomPhoto.urls.small}">
+                <h2>Photo by ${randomPhoto.user.name}</h2>
+            </div>
+            `
+            }
+        }
+
+        loadRandomPhoto();
+
+        const likeButton = document.querySelector('.image-button');
+        const likeContainer = document.querySelector('.like-container');
+
+        const likeCounter = document.createElement('div');
+        likeCounter.classList = "like-counter";
+        likeCounter.textContent = `${0} likes`;
+        likeContainer.appendChild(likeCounter);
+
+        likeButton.addEventListener('click', function () {
+
+            // Увеличиваем счетчик на 1
+            likeCounter.textContent = `${parseInt(likeCounter.textContent) + 1} likes`;
+
+            // Сохраняем счетчик в локальное хранилище
+            localStorage.setItem('likeCounter', likeCounter.textContent);
+        });
+
+        // Проверяем, есть ли сохраненное значение счетчика в локальном хранилище
+        if (localStorage.getItem('likeCounter')) {
+            likeCounter.textContent = localStorage.getItem('likeCounter');
+        }
+
+
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- 1. Создайте интерфейс веб-страницы, который включает в себя следующие элементы:
+     a. Выпадающий список (select) с категориями товаров.
+     b. Список товаров, который будет отображать товары в соответствии с выбранной категорией.
+     c. Каждый товар в списке должен содержать название и категорию.
+    2. Используйте HTML для создания элементов интерфейса.
+    3. Используйте JavaScript для обработки событий: 
+     - При выборе категории товаров в выпадающем списке, форма должна следить за изменениями.
+     - Динамически обновите список товаров на странице, чтобы отображать только товары из выбранной категории.
+    4. Создайте объекты товаров и их категорий для имитации данных магазина.
+    5. Стилизуйте элементы интерфейса с помощью CSS для улучшения внешнего вида. -->
+
+
+    <h2>Выберите категорию товаров:</h2>
+    <select id="category-select">
+        <option value="">Все категории</option>
+        <option value="Электроника">Электроника</option>
+        <option value="Бытовая техника">Бытовая техника</option>
+        <option value="Книги">Книги</option>
+        <option value="Одежда">Одежда</option>
+        <option value="Мебель">Мебель</option>
+    </select>
+    <h2>Товары:</h2>
+    <ul id="products-list"></ul>
+</body>
+
+<script>
+    const productsData = [
+        {
+            id: 1,
+            name: "Ноутбук",
+            category: "Электроника",
+        },
+        {
+            id: 2,
+            name: "Смартфон",
+            category: "Электроника",
+        },
+        {
+            id: 3,
+            name: "Кофемашина",
+            category: "Бытовая техника",
+        },
+        {
+            id: 4,
+            name: "Фотокамера",
+            category: "Электроника",
+        },
+        {
+            id: 5,
+            name: "Микроволновая печь",
+            category: "Бытовая техника",
+        },
+        {
+            id: 6,
+            name: "Книга",
+            category: "Книги",
+        },
+        {
+            id: 7,
+            name: "Футболка",
+            category: "Одежда",
+        },
+        {
+            id: 8,
+            name: "Шапка",
+            category: "Одежда",
+        },
+        {
+            id: 9,
+            name: "Стул",
+            category: "Мебель",
+        },
+        {
+            id: 10,
+            name: "Стол",
+            category: "Мебель",
+        },
+    ];
+
+    const categorySelect = document.getElementById('category-select');
+    const productstList = document.getElementById('products-list');
+
+    categorySelect.addEventListener('change', function () {
+        productstList.innerHTML = ''; //Очистить список перед добавлением товаров
+
+        if (categorySelect.value !== "") {
+            const filteredProducts = productsData.filter(product => product.category === categorySelect.value);
+            displayProducts(filteredProducts);
+        }
+        else {
+            displayProducts(productsData);
+        }
+    });
+
+    function displayProducts(products) {
+        products.forEach(product => {
+            const productEl = document.createElement('li');
+            productEl.textContent = product.name;
+            productstList.appendChild(productEl);
+        });
+    }
+
+    // расширенная версия
+    // if (selectedCategory === '') {
+    //     productsData.forEach(product => {
+    //         const productEl = document.createElement('li');
+    //         productEl.textContent = product.name;
+    //         productstList.appendChild(productEl);
+    //     })
+    // } else {
+    //     const filteredProducts = productsData.filter(product => product.category === selectedCategory);
+    //     filteredProducts.forEach(product => {
+    //         const productEl = document.createElement('li');
+    //         productEl.textContent = product.name;
+    //         productstList.appendChild(productEl);
+    //     })
+    // }
+
+</script>
+
+</html>
